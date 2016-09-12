@@ -4,21 +4,33 @@ Created on Sat Aug 06 17:33:38 2016
 
 @author: Oos
 """
+
+"""
+the script test the storing of itmes of the rest APi into MOngoDB databases
+the actual getting of data is better daone using the stream api
+but this serves a trial start to get a feeling and understanding for some items
+"""
+
+# building on top of IGSERVICE
 from trading_ig import IGService
 
-#then my password
+#get teh pasword
 from trading_ig_config import config
 
+#get the epics we want to copy
 import epic_List as eL
+
+#get the other needed python libs
 import time
 import pymongo
 
-# establish a connection to the database
+# establish a connection to the mongo server
 connection = pymongo.MongoClient("mongodb://localhost")
 # define database
 db=connection.ig_trade
 
 #define one colelction per epic
+#here hard coded in - needs to be adjusted and be done more flexible
 eurusd = db.eurusd
 gbpusd = db.gbpusd
 gbpeur = db.gbpeur
@@ -43,6 +55,7 @@ while counter < 80:
     bunch_list =[]
     epicList = eL.epics_main
     
+    #get the market prices by their epic number
     for epic in epicList:
         bunch_list.append(ig_service.fetch_market_by_epic(epic))
     
